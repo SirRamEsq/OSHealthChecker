@@ -1,0 +1,20 @@
+[
+	{
+		"type": "fileExists",
+		"path":"/home/pc/res.txt"
+	},
+	{
+		"type": "fileExists",
+		"path":"/home/pc/res.txt"
+	},
+
+	{
+		"type": "fileExists",
+		"path":"/home/pc/res.txt"
+	},
+	{
+		"type": "fileExists",
+		"path":"/home/pc/res.txt",
+		"invert":true
+	}
+]

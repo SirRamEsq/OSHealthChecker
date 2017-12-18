@@ -1,13 +1,11 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"healthChecker/cmd"
-	"healthChecker/fileExists"
+	"healthChecker/jsonParser"
 	"healthChecker/logger"
-	"os"
-	"strconv"
+	"io/ioutil"
 
 	"github.com/fatih/color"
 )
@@ -23,32 +21,32 @@ func main() {
 	fmt.Println()
 	log := logger.New()
 
-	configFile, err := os.Open("test.json")
+	configFileName := "test.json"
+	configFile, err := ioutil.ReadFile(configFileName)
 	if err != nil {
 		log.Error("opening config file" + err.Error())
 	}
 
-	jsonParser := json.NewDecoder(configFile)
-	newFE := []fileExists.FileExists{}
-	if err = jsonParser.Decode(&newFE); err != nil {
+	executables, err := jsonParser.ParseExecutables(configFile)
+	if err != nil {
 		log.Error("parsing config file" + err.Error())
 	}
 
-	for i := 0; i < len(newFE); i++ {
-		fileExists := newFE[i]
-		result := fileExists.Execute()
+	for i := 0; i < len(executables); i++ {
+		exe := executables[i]
+		result, err := exe.Execute()
+		if err != nil {
+			log.Error(err.Error())
+			continue
+		}
 
 		if !result {
-			log.Fail(fileExists.String())
+			log.Fail(exe.String())
 		} else {
-			log.Pass(fileExists.String())
+			log.Pass(exe.String())
 		}
 	}
 	fmt.Println(separator)
-	color.Set(color.FgWhite, color.Bold)
-	finalStr := "Total Checks: " + strconv.Itoa(log.ChecksCount())
-	fmt.Println(finalStr)
-	color.Unset()
 
 	log.PrintStatus()
 }

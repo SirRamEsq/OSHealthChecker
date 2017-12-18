@@ -1,20 +1,23 @@
 [
 	{
-		"type": "fileExists",
-		"path":"/home/pc/res.txt"
+		"check": "fileExists",
+		"args":{
+			"path":"/home/pc/res.txt"
+		}
 	},
 	{
-		"type": "fileExists",
-		"path":"/home/pc/res.txt"
-	},
-
-	{
-		"type": "fileExists",
-		"path":"/home/pc/res.txt"
+		"check": "fileExists",
+		"args":{
+			"path":"/home/pc/res.txt",
+			"invert":false
+		}
 	},
 	{
-		"type": "fileExists",
-		"path":"/home/pc/res.txt",
-		"invert":true
+		"check": "fileExists",
+		"args":{
+			"path":"/home/pc/res.txt",
+			"invert":true
+		}
 	}
+
 ]

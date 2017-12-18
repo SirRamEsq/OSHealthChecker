@@ -36,10 +36,14 @@ func (l *Logger) Error(message string) {
 	color.Set(color.BgRed, color.FgWhite, color.Bold)
 	cmd.PrintlnRightAlign(message)
 	color.Unset()
-	l.passes += 1
 }
 
 func (l *Logger) PrintStatus() {
+	color.Set(color.FgWhite, color.Bold)
+	finalStr := "Total Checks: " + strconv.Itoa(l.ChecksCount())
+	fmt.Println(finalStr)
+	color.Unset()
+
 	failString := "FAILED: " + strconv.Itoa(l.fails)
 	passString := "PASSED: " + strconv.Itoa(l.passes)
 	color.Set(color.FgGreen, color.Bold)
@@ -49,10 +53,29 @@ func (l *Logger) PrintStatus() {
 	cmd.PrintlnLeftAlign(failString)
 	color.Unset()
 
+	if l.ChecksCount() == 0 {
+		cmd.PrintlnCenter("NO CHECKS!")
+		return
+	}
+
 	termWidth := cmd.GetTerminalWidth()
 	percent := float64(float64(l.passes) / float64(l.ChecksCount()))
 	passedCharacters := int(math.Floor(float64(termWidth) * percent))
 	failedCharacters := termWidth - passedCharacters
+
+	percentInt := int(percent * 100)
+	percentString := strconv.Itoa(percentInt)
+
+	if percentInt == 100 {
+		color.Set(color.FgGreen, color.Bold)
+	} else if percentInt > 60 {
+		color.Set(color.FgYellow, color.Bold)
+
+	} else {
+		color.Set(color.FgRed, color.Bold)
+	}
+	cmd.PrintlnCenter(percentString + "%")
+	color.Unset()
 
 	passedString := ""
 	failedString := ""

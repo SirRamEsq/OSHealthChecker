@@ -10,15 +10,16 @@ type FileExists struct {
 }
 
 // Check if file exists
-func (fe FileExists) Execute() bool {
+func (fe FileExists) Execute() (bool, error) {
 	returnValue := false
-	if _, err := os.Stat(fe.FilePath); err == nil {
+	var err error
+	if _, err = os.Stat(fe.FilePath); err == nil {
 		returnValue = true
 	}
 	if fe.Invert {
 		returnValue = !returnValue
 	}
-	return returnValue
+	return returnValue, err
 }
 
 func (fe FileExists) String() string {

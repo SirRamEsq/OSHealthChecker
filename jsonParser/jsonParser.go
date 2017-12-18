@@ -9,7 +9,7 @@ import (
 
 type Executable interface {
 	Execute() (bool, error)
-	String() string
+	String(bool) string
 }
 
 func ParseExecutables(data []byte) ([]Executable, error) {
@@ -30,7 +30,7 @@ func ParseExecutables(data []byte) ([]Executable, error) {
 	for _, c := range checks {
 		var exe Executable
 		switch c.CheckType {
-		case "CmdMatch":
+		case "cmdMatch":
 			cmd := new(cmdMatch.CmdMatch)
 			json.Unmarshal(c.Args, &cmd)
 			exe = cmd

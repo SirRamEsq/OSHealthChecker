@@ -16,9 +16,12 @@ type CmdMatch struct {
 	FileOutputPath string `json:"fileOutput"`
 
 	Invert bool `json:"invert"`
+
+	ExpectedOutput string
+	ActualOutput   string
 }
 
-func (run CmdMatch) checkCmdAgainstFile(cmdOutput *bytes.Buffer) (bool, error) {
+func (run *CmdMatch) checkCmdAgainstFile(cmdOutput *bytes.Buffer) (bool, error) {
 	//If output file cannot be found
 	if _, err := os.Stat(run.FileOutputPath); err != nil {
 		return false, err
@@ -29,15 +32,20 @@ func (run CmdMatch) checkCmdAgainstFile(cmdOutput *bytes.Buffer) (bool, error) {
 		return false, err
 	}
 
+	run.ExpectedOutput = string(outputFile)
+	run.ActualOutput = cmdOutput.String()
+
 	return bytes.Equal(outputFile, cmdOutput.Bytes()), nil
 }
 
-func (run CmdMatch) checkCmdAgainstOutput(cmdOutput *bytes.Buffer) (bool, error) {
+func (run *CmdMatch) checkCmdAgainstOutput(cmdOutput *bytes.Buffer) (bool, error) {
+	run.ActualOutput = cmdOutput.String()
+	run.ExpectedOutput = run.Output
 	return (cmdOutput.String() == run.Output), nil
 }
 
 // Check if file exists
-func (run CmdMatch) Execute() (bool, error) {
+func (run *CmdMatch) Execute() (bool, error) {
 	returnValue := false
 
 	//Run command
@@ -64,10 +72,14 @@ func (run CmdMatch) Execute() (bool, error) {
 	return returnValue, err
 }
 
-func (run CmdMatch) String() string {
+func (run CmdMatch) String(passed bool) string {
 	str := "Command \"" + run.Cmd + "\""
 	if run.Invert {
 		str = "(NOT) " + str
+	}
+	if !passed {
+		str += "\nExpected Output:\n" + run.ExpectedOutput
+		str += "\nActual Output:\n" + run.ActualOutput
 	}
 	return str
 }

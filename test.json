@@ -18,6 +18,14 @@
 			"path":"/home/pc/res.txt",
 			"invert":true
 		}
+	},
+	{
+		"check": "cmdMatch",
+		"args":{
+			"cmd":"ls",
+			"fileOutput":"test.txt",
+			"invert":false
+		}
 	}
 
 ]

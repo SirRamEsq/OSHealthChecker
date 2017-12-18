@@ -34,16 +34,16 @@ func main() {
 
 	for i := 0; i < len(executables); i++ {
 		exe := executables[i]
-		result, err := exe.Execute()
+		passed, err := exe.Execute()
 		if err != nil {
 			log.Error(err.Error())
 			continue
 		}
 
-		if !result {
-			log.Fail(exe.String())
+		if !passed {
+			log.Fail(exe.String(passed))
 		} else {
-			log.Pass(exe.String())
+			log.Pass(exe.String(passed))
 		}
 	}
 	fmt.Println(separator)

@@ -22,7 +22,7 @@ func (fe FileExists) Execute() (bool, error) {
 	return returnValue, err
 }
 
-func (fe FileExists) String() string {
+func (fe FileExists) String(passed bool) string {
 	str := "File Exists at \"" + fe.FilePath + "\""
 	if fe.Invert {
 		str = "(NOT) " + str

@@ -6,9 +6,19 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"unicode"
 
 	"golang.org/x/text/unicode/norm"
 )
+
+func RemoveWhitespace(str string) string {
+	return strings.Map(func(r rune) rune {
+		if unicode.IsSpace(r) {
+			return -1
+		}
+		return r
+	}, str)
+}
 
 type CmdMatch struct {
 	Cmd         string   `json:"cmd"`
@@ -19,7 +29,8 @@ type CmdMatch struct {
 	Output         string `json:"output"`
 	FileOutputPath string `json:"fileOutput"`
 
-	Invert bool `json:"invert"`
+	Invert     bool `json:"invert"`
+	Whitespace bool `json:"whitespace"`
 
 	ExpectedOutput string
 	ActualOutput   string
@@ -42,6 +53,11 @@ func (run *CmdMatch) checkCmdAgainstFile(cmdOutput *bytes.Buffer) (bool, error) 
 	run.ActualOutput = string(norm.NFC.Bytes([]byte(run.ActualOutput)))
 	run.ExpectedOutput = string(norm.NFC.Bytes([]byte(run.ExpectedOutput)))
 
+	if !run.Whitespace {
+		run.ActualOutput = RemoveWhitespace(run.ActualOutput)
+		run.ExpectedOutput = RemoveWhitespace(run.ExpectedOutput)
+	}
+
 	return (run.ActualOutput == run.ExpectedOutput), nil
 }
 
@@ -50,6 +66,12 @@ func (run *CmdMatch) checkCmdAgainstOutput(cmdOutput *bytes.Buffer) (bool, error
 	run.ExpectedOutput = run.Output
 	run.ActualOutput = string(norm.NFC.Bytes([]byte(run.ActualOutput)))
 	run.ExpectedOutput = string(norm.NFC.Bytes([]byte(run.ExpectedOutput)))
+
+	if !run.Whitespace {
+		run.ActualOutput = RemoveWhitespace(run.ActualOutput)
+		run.ExpectedOutput = RemoveWhitespace(run.ExpectedOutput)
+	}
+
 	return (run.ActualOutput == run.ExpectedOutput), nil
 }
 

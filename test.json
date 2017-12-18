@@ -26,7 +26,7 @@
 		"args":{
 			"cmd":"echo",
 			"args":["1"],
-			"output":"1\n",
+			"output":"1",
 			"invert":false
 		}
 	},

@@ -24,7 +24,7 @@
 		"args":{
 			"cmd":"ls",
 			"fileOutput":"test.txt",
-			"invert":false
+			"invert":true
 		}
 	}
 

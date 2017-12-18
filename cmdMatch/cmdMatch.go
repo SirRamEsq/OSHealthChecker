@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 type CmdMatch struct {
@@ -78,8 +79,9 @@ func (run CmdMatch) String(passed bool) string {
 		str = "(NOT) " + str
 	}
 	if !passed {
-		str += "\nExpected Output:\n" + run.ExpectedOutput
-		str += "\nActual Output:\n" + run.ActualOutput
+		//indent
+		str += "\nExpected Output:\n    " + strings.Replace(run.ExpectedOutput, "\n", "\n    ", -1)
+		str += "\nActual Output:\n    " + strings.Replace(run.ActualOutput, "\n", "\n    ", -1)
 	}
 	return str
 }

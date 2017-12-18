@@ -1,0 +1,14 @@
+cmd
+cmdExist
+cmdMatch
+Data
+fileExists
+healthChecker
+healthChecker.exe
+jsonParser
+logger
+main.go
+makeRun.sh
+makeWindows.sh
+test.json
+vimSession.vim

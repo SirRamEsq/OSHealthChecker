@@ -17,7 +17,7 @@
 		"check": "cmdMatch",
 		"args":{
 			"cmd":"ls",
-			"fileOutput":"test.txt",
+			"fileOutput":"Data/test.txt",
 			"invert":false
 		}
 	},

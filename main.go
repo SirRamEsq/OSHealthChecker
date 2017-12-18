@@ -10,7 +10,7 @@ import (
 	"github.com/fatih/color"
 )
 
-func main() {
+func PrintBanner() {
 	tWidth := cmd.GetTerminalWidth()
 	separator := cmd.Separator(tWidth)
 	color.Set(color.FgWhite, color.Bold)
@@ -19,6 +19,13 @@ func main() {
 	cmd.PrintlnLeftRight("--~--~", "~--~--")
 	fmt.Println(separator)
 	fmt.Println()
+	color.Unset()
+}
+
+func main() {
+	PrintBanner()
+	tWidth := cmd.GetTerminalWidth()
+	separator := cmd.Separator(tWidth)
 	log := logger.New()
 
 	configFileName := "test.json"

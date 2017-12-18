@@ -9,8 +9,9 @@ import (
 )
 
 type CmdMatch struct {
-	Cmd  string   `json:"cmd"`
-	Args []string `json:"args"`
+	Cmd         string   `json:"cmd"`
+	Args        []string `json:"args"`
+	Environment []string `json:"env"`
 	//Can use either output or file output
 	//FileOutputPath overrides Output
 	Output         string `json:"output"`
@@ -52,6 +53,12 @@ func (run *CmdMatch) Execute() (bool, error) {
 	//Run command
 	cmd := exec.Command(run.Cmd)
 	cmd.Args = run.Args
+	cmd.Env = os.Environ()
+	for i := 0; i != len(run.Environment); i++ {
+		//prepend and append, ensuring overwrite
+		cmd.Env = append(cmd.Env, run.Environment[i])
+		cmd.Env = append([]string{run.Environment[i]}, cmd.Env...)
+	}
 	var out bytes.Buffer
 	cmd.Stdout = &out
 	err := cmd.Run()

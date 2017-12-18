@@ -2,12 +2,6 @@
 	{
 		"check": "fileExists",
 		"args":{
-			"path":"/home/pc/res.txt"
-		}
-	},
-	{
-		"check": "fileExists",
-		"args":{
 			"path":"/home/pc/res.txt",
 			"invert":false
 		}
@@ -15,7 +9,7 @@
 	{
 		"check": "fileExists",
 		"args":{
-			"path":"/home/pc/res.txt",
+			"path":"/home/pc/rsdfes.txt",
 			"invert":true
 		}
 	},

@@ -18,6 +18,8 @@ func (fe FileExists) Execute() (bool, error) {
 	}
 	if fe.Invert {
 		returnValue = !returnValue
+		//don't report errors if you inted for this to fail
+		return returnValue, nil
 	}
 	return returnValue, err
 }

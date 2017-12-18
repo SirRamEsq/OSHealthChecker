@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"lengine/logger"
 	"os"
 	"os/exec"
 	"strconv"
@@ -11,9 +10,11 @@ import (
 )
 
 var MAX_WIDTH int
+var WIN_WIDTH int
 
 func init() {
 	MAX_WIDTH = 104
+	WIN_WIDTH = 80
 }
 
 func StrToInt(str string) (int, error) {
@@ -26,7 +27,8 @@ func GetTerminalDimensions() (int, int) {
 	cmd.Stdin = os.Stdin
 	out, err := cmd.Output()
 	if err != nil {
-		logger.Critical("Cannot get size of terminal!")
+		//logger.Critical("Cannot get size of terminal! using default...")
+		return WIN_WIDTH, 30
 	}
 	/*
 		out contains the width and height of the terminal in the format

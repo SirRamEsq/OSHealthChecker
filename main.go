@@ -24,27 +24,27 @@ func main() {
 	configFileName := "test.json"
 	configFile, err := ioutil.ReadFile(configFileName)
 	if err != nil {
-		log.Error("opening config file" + err.Error())
+		log.Error("Error opening config file" + err.Error())
 	}
 
 	executables, err := jsonParser.ParseExecutables(configFile)
 	if err != nil {
-		log.Error("parsing config file" + err.Error())
+		log.Error("Error Parsing config file" + err.Error())
 	}
 
 	for i := 0; i < len(executables); i++ {
 		exe := executables[i]
 		passed, err := exe.Execute()
-		if err != nil {
-			log.Error(err.Error())
-			continue
-		}
-
 		if !passed {
 			log.Fail(exe.String(passed))
 		} else {
 			log.Pass(exe.String(passed))
 		}
+
+		if err != nil {
+			log.Error(err.Error())
+		}
+
 	}
 	fmt.Println(separator)
 

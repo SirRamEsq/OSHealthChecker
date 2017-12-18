@@ -3,6 +3,7 @@ package jsonParser
 import (
 	"encoding/json"
 	"errors"
+	"healthChecker/cmdExist"
 	"healthChecker/cmdMatch"
 	"healthChecker/fileExists"
 )
@@ -29,17 +30,23 @@ func ParseExecutables(data []byte) ([]Executable, error) {
 
 	for _, c := range checks {
 		var exe Executable
+		var err error
 		switch c.CheckType {
 		case "cmdMatch":
 			cmd := new(cmdMatch.CmdMatch)
-			json.Unmarshal(c.Args, &cmd)
+			err = json.Unmarshal(c.Args, &cmd)
+			exe = cmd
+		case "cmdExist":
+			cmd := new(cmdExist.CmdExist)
+			err = json.Unmarshal(c.Args, &cmd)
 			exe = cmd
 		case "fileExists":
 			fe := new(fileExists.FileExists)
-			json.Unmarshal(c.Args, &fe)
+			err = json.Unmarshal(c.Args, &fe)
 			exe = fe
+		default:
+			err = errors.New("\"" + c.CheckType + "\" is not a valid check")
 		}
-		err := json.Unmarshal(c.Args, exe)
 		if err != nil {
 			aggregatedError = errors.New(aggregatedError.Error() + "\n" + err.Error())
 		} else {

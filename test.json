@@ -24,7 +24,21 @@
 		"args":{
 			"cmd":"ls",
 			"fileOutput":"test.txt",
+			"invert":false
+		}
+	},
+	{
+		"check": "cmdExist",
+		"args":{
+			"cmd":"isagf",
 			"invert":true
+		}
+	},
+	{
+		"check": "cmdExist",
+		"args":{
+			"cmd":"vim",
+			"invert":false
 		}
 	}
 

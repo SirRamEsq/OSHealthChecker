@@ -64,17 +64,21 @@ func PrintlnLeftAlign(str string) {
 }
 func PrintlnRightAlign(str string) {
 	tWidth := GetTerminalWidth()
-	strLength := utf8.RuneCountInString(str)
-	if strLength <= tWidth {
-		bufferWidth := tWidth - strLength
-		finalString := ""
-		for i := 0; i < bufferWidth; i++ {
-			finalString += " "
+	subStrings := strings.Split(str, "\n")
+	for i := 0; i != len(subStrings); i++ {
+		sub := subStrings[i]
+		strLength := utf8.RuneCountInString(sub)
+		if strLength <= tWidth {
+			bufferWidth := tWidth - strLength
+			finalString := ""
+			for i := 0; i < bufferWidth; i++ {
+				finalString += " "
+			}
+			finalString += sub
+			fmt.Println(finalString)
+		} else {
+			PrintlnLeftAlign(sub)
 		}
-		finalString += str
-		fmt.Println(finalString)
-	} else {
-		PrintlnLeftAlign(str)
 	}
 }
 func PrintlnCenter(str string) {

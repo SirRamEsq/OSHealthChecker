@@ -45,7 +45,7 @@ func (run *CmdMatch) checkCmdAgainstOutput(cmdOutput *bytes.Buffer) (bool, error
 	return (cmdOutput.String() == run.Output), nil
 }
 
-// Check if file exists
+// Check if Command matches expected output
 func (run *CmdMatch) Execute() (bool, error) {
 	returnValue := false
 
@@ -78,7 +78,8 @@ func (run CmdMatch) String(passed bool) string {
 	if run.Invert {
 		str = "(NOT) " + str
 	}
-	if !passed {
+	//only show verbose output if not inverted
+	if (!passed) && (!run.Invert) {
 		//indent
 		str += "\nExpected Output:\n    " + strings.Replace(run.ExpectedOutput, "\n", "\n    ", -1)
 		str += "\nActual Output:\n    " + strings.Replace(run.ActualOutput, "\n", "\n    ", -1)

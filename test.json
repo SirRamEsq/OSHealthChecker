@@ -22,6 +22,15 @@
 		}
 	},
 	{
+		"check": "cmdMatch",
+		"args":{
+			"cmd":"echo",
+			"args":["1"],
+			"output":"1\n",
+			"invert":false
+		}
+	},
+	{
 		"check": "cmdExist",
 		"args":{
 			"cmd":"isagf",

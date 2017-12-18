@@ -6,6 +6,8 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+
+	"golang.org/x/text/unicode/norm"
 )
 
 type CmdMatch struct {
@@ -37,13 +39,18 @@ func (run *CmdMatch) checkCmdAgainstFile(cmdOutput *bytes.Buffer) (bool, error) 
 	run.ExpectedOutput = string(outputFile)
 	run.ActualOutput = cmdOutput.String()
 
-	return bytes.Equal(outputFile, cmdOutput.Bytes()), nil
+	run.ActualOutput = string(norm.NFC.Bytes([]byte(run.ActualOutput)))
+	run.ExpectedOutput = string(norm.NFC.Bytes([]byte(run.ExpectedOutput)))
+
+	return (run.ActualOutput == run.ExpectedOutput), nil
 }
 
 func (run *CmdMatch) checkCmdAgainstOutput(cmdOutput *bytes.Buffer) (bool, error) {
 	run.ActualOutput = cmdOutput.String()
 	run.ExpectedOutput = run.Output
-	return (cmdOutput.String() == run.Output), nil
+	run.ActualOutput = string(norm.NFC.Bytes([]byte(run.ActualOutput)))
+	run.ExpectedOutput = string(norm.NFC.Bytes([]byte(run.ExpectedOutput)))
+	return (run.ActualOutput == run.ExpectedOutput), nil
 }
 
 // Check if Command matches expected output
@@ -52,12 +59,12 @@ func (run *CmdMatch) Execute() (bool, error) {
 
 	//Run command
 	cmd := exec.Command(run.Cmd)
-	cmd.Args = run.Args
+	for i := 0; i != len(run.Args); i++ {
+		cmd.Args = append(cmd.Args, run.Args[0])
+	}
 	cmd.Env = os.Environ()
 	for i := 0; i != len(run.Environment); i++ {
-		//prepend and append, ensuring overwrite
 		cmd.Env = append(cmd.Env, run.Environment[i])
-		cmd.Env = append([]string{run.Environment[i]}, cmd.Env...)
 	}
 	var out bytes.Buffer
 	cmd.Stdout = &out
